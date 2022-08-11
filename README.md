@@ -1,22 +1,15 @@
-# Scene Graph Transformer with CogTree Loss in Pytorch
+# Geometric and Semantic Improvement for Unbiased Scene Graph Generation in Pytorch
 [![Python](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/)
 ![PyTorch](https://img.shields.io/badge/pytorch-1.4.0-%237732a8)
 
 ## Contents
 
-1. [Overview](#Overview)
-2. [Install the Requirements](INSTALL.md)
-3. [Prepare the Dataset](DATASET.md)
-4. [Training on Scene Graph Generation](#Examples of the Training SG-Transformer Command)
-5. [Evaluation on Scene Graph Generation](#Evaluation)
 
 ## Overview
 
-This code is based on [Scene Graph Benchmark](https://github.com/KaihuaTang/Scene-Graph-Benchmark.pytorch) and [Neural-Backed Decision Trees](https://github.com/alvinwan/neural-backed-decision-trees). We propose a new SG-Transformer model and a novel CogTree loss in SGG task. We merge the Pytorch implementation into Scene Graph Benchmark. Please see more details in our paper [CogTree: Cognition Tree Loss for Unbiased Scene Graph Generation](https://arxiv.org/abs/2009.07526).
 
 ## Installation
 
-Check [INSTALL.md](INSTALL.md) for installation instructions.
 
 ## Dataset
 
