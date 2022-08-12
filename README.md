@@ -87,7 +87,9 @@ Training Example 1 : (SGCls, Transformer)
 CUDA_VISIBLE_DEVICES=0 python tools/relation_train_net.py --config-file "configs/e2e_relation_X_101_32_8_FPN_1x_transformer.yaml" MODEL.ROI_RELATION_HEAD.USE_GT_BOX True MODEL.ROI_RELATION_HEAD.USE_GT_OBJECT_LABEL False MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor SOLVER.IMS_PER_BATCH 12 TEST.IMS_PER_BATCH 1 DTYPE "float32" SOLVER.MAX_ITER 25000 SOLVER.VAL_PERIOD 5000 SOLVER.CHECKPOINT_PERIOD 5001 SOLVER.STEPS 25000, GLOVE_DIR ./glove_dir MODEL.PRETRAINED_DETECTOR_CKPT ./checkpoints/pretrained_faster_rcnn/model_final.pth OUTPUT_DIR ./checkpoints/SG-Transformer-SGCls
 MODEL.ROI_RELATION_HEAD.LOSS.USE_CLASS_BALANCED_LOSS False MODEL.ROI_RELATION_HEAD.LOSS.USE_NBDT_LOSS False
 ```
-where ```GLOVE_DIR``` is the directory used to save glove initializations, ```MODEL.PRETRAINED_DETECTOR_CKPT``` is the pretrained Faster R-CNN model you want to load, ```OUTPUT_DIR``` is the output directory used to save checkpoints and the log, ```SOLVER.CHECKPOINT_PERIOD``` must be singular in value.
+
+where ```GLOVE_DIR``` is the directory used to save glove initializations, ```MODEL.PRETRAINED_DETECTOR_CKPT``` is the pretrained Faster R-CNN model you want to load, ```OUTPUT_DIR``` is the output directory used to save checkpoints and the log, ```SOLVER.CHECKPOINT_PERIOD```must be singular in value.
+
 
 Training Example 2 : (SGCls, GSI)
 ```bash
