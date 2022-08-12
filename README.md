@@ -68,10 +68,10 @@ MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor
 
 The default settings are under ```configs/e2e_relation_X_101_32_8_FPN_1x.yaml``` and ```maskrcnn_benchmark/config/defaults.py```. The priority is ```command > yaml > defaults.py```.
 
-### CogTree loss
+### GSI loss
 The CogTree loss consist of two parts: the Class Balanced Seesaw Loss (CBS) and the tree-based class-balanced hierarchical classification loss (TCB).
 
-For CB, we need to set:
+For CBS, we need to set:
 ```bash
 MODEL.ROI_RELATION_HEAD.LOSS.USE_CLASS_BALANCED_LOSS True
 ```
