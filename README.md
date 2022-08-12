@@ -3,13 +3,17 @@
 ![PyTorch](https://img.shields.io/badge/pytorch-1.4.0-%237732a8)
 
 ## Contents
-
+1. [Overview](#Overview)
+2. [Install the Requirements](INSTALL.md)
+3. [Prepare the Dataset](DATASET.md)
+4. [Training on Scene Graph Generation](#Examples of the Training SG-Transformer Command)
+5. [Evaluation on Scene Graph Generation](#Evaluation)
 
 ## Overview
-
+This code is based on [Scene Graph Benchmark](https://github.com/KaihuaTang/Scene-Graph-Benchmark.pytorch) and [Neural-Backed Decision Trees](https://github.com/alvinwan/neural-backed-decision-trees). We propose a new method GSI(Geometric and Semantic Improvement) in SGG task. We merge the Pytorch implementation into Scene Graph Benchmark. 
 
 ## Installation
-
+Check [INSTALL.md](INSTALL.md) for installation instructions.
 
 ## Dataset
 
@@ -65,7 +69,7 @@ MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor
 The default settings are under ```configs/e2e_relation_X_101_32_8_FPN_1x.yaml``` and ```maskrcnn_benchmark/config/defaults.py```. The priority is ```command > yaml > defaults.py```.
 
 ### CogTree loss
-The CogTree loss consist of two parts: the class-balanced cross-entropy loss (CB) and the tree-based class-balanced hierarchical classification loss (TCB).
+The CogTree loss consist of two parts: the Class Balanced Seesaw Loss (CBS) and the tree-based class-balanced hierarchical classification loss (TCB).
 
 For CB, we need to set:
 ```bash
@@ -77,22 +81,27 @@ MODEL.ROI_RELATION_HEAD.LOSS.USE_NBDT_LOSS True
 ```
 
 ### Examples of the Training SG-Transformer Command
-Training Example 1 : (SGCls)
+Training Example 1 : (SGCls, Transformer)
 ```bash
-CUDA_VISIBLE_DEVICES=0 python tools/relation_train_net.py --config-file "configs/e2e_relation_X_101_32_8_FPN_1x_transformer.yaml" MODEL.ROI_RELATION_HEAD.USE_GT_BOX True MODEL.ROI_RELATION_HEAD.USE_GT_OBJECT_LABEL False MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor SOLVER.IMS_PER_BATCH 12 TEST.IMS_PER_BATCH 1 DTYPE "float16" SOLVER.MAX_ITER 25000 SOLVER.VAL_PERIOD 5000 SOLVER.CHECKPOINT_PERIOD 5000 SOLVER.STEPS 25000, GLOVE_DIR home/yuanchai/glove_dir MODEL.PRETRAINED_DETECTOR_CKPT home/yuanchai/checkpoints/pretrained_faster_rcnn/model_final.pth OUTPUT_DIR home/yuanchai/checkpoints/SG-Transformer-SGCls
+CUDA_VISIBLE_DEVICES=0 python tools/relation_train_net.py --config-file "configs/e2e_relation_X_101_32_8_FPN_1x_transformer.yaml" MODEL.ROI_RELATION_HEAD.USE_GT_BOX True MODEL.ROI_RELATION_HEAD.USE_GT_OBJECT_LABEL False MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor SOLVER.IMS_PER_BATCH 12 TEST.IMS_PER_BATCH 1 DTYPE "float32" SOLVER.MAX_ITER 25000 SOLVER.VAL_PERIOD 5000 SOLVER.CHECKPOINT_PERIOD 5001 SOLVER.STEPS 25000, GLOVE_DIR ./glove_dir MODEL.PRETRAINED_DETECTOR_CKPT ./checkpoints/pretrained_faster_rcnn/model_final.pth OUTPUT_DIR ./checkpoints/SG-Transformer-SGCls
+MODEL.ROI_RELATION_HEAD.LOSS.USE_CLASS_BALANCED_LOSS False MODEL.ROI_RELATION_HEAD.LOSS.USE_NBDT_LOSS False
 ```
-where ```GLOVE_DIR``` is the directory used to save glove initializations, ```MODEL.PRETRAINED_DETECTOR_CKPT``` is the pretrained Faster R-CNN model you want to load, ```OUTPUT_DIR``` is the output directory used to save checkpoints and the log.
+where ```GLOVE_DIR``` is the directory used to save glove initializations, ```MODEL.PRETRAINED_DETECTOR_CKPT``` is the pretrained Faster R-CNN model you want to load, ```OUTPUT_DIR``` is the output directory used to save checkpoints and the log, ```SOLVER.CHECKPOINT_PERIOD```must be singular in value.
 
-Training Example 2 : (SGCls, CogTree)
+Training Example 2 : (SGCls, GSI)
 ```bash
-CUDA_VISIBLE_DEVICES=0 python tools/relation_train_net.py --config-file "configs/e2e_relation_X_101_32_8_FPN_1x_transformer.yaml" MODEL.ROI_RELATION_HEAD.USE_GT_BOX True MODEL.ROI_RELATION_HEAD.USE_GT_OBJECT_LABEL False MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor SOLVER.IMS_PER_BATCH 12 TEST.IMS_PER_BATCH 1 DTYPE "float16" SOLVER.MAX_ITER 25000 SOLVER.VAL_PERIOD 5000 SOLVER.CHECKPOINT_PERIOD 5000 SOLVER.STEPS 25000, GLOVE_DIR home/yuanchai/glove_dir MODEL.PRETRAINED_DETECTOR_CKPT home/yuanchai/checkpoints/pretrained_faster_rcnn/model_final.pth OUTPUT_DIR home/yuanchai/checkpoints/SG-Transformer-SGCls-CogTree MODEL.ROI_RELATION_HEAD.LOSS.USE_CLASS_BALANCED_LOSS True MODEL.ROI_RELATION_HEAD.LOSS.USE_NBDT_LOSS True
+CUDA_VISIBLE_DEVICES=0 python tools/relation_train_net.py --config-file "configs/e2e_relation_X_101_32_8_FPN_1x_transformer.yaml" MODEL.ROI_RELATION_HEAD.USE_GT_BOX True MODEL.ROI_RELATION_HEAD.USE_GT_OBJECT_LABEL False MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor SOLVER.IMS_PER_BATCH 12 TEST.IMS_PER_BATCH 1 DTYPE "float32" SOLVER.MAX_ITER 25000 SOLVER.VAL_PERIOD 5000 SOLVER.CHECKPOINT_PERIOD 5001 SOLVER.STEPS 25000, GLOVE_DIR ./glove_dir MODEL.PRETRAINED_DETECTOR_CKPT ./checkpoints/pretrained_faster_rcnn/model_final.pth OUTPUT_DIR ./checkpoints/SG-Transformer-SGCls-GSI MODEL.ROI_RELATION_HEAD.LOSS.USE_CLASS_BALANCED_LOSS True MODEL.ROI_RELATION_HEAD.LOSS.USE_NBDT_LOSS True
 ```
 
 
 ## Evaluation
+### Examples of the Val SG-Transformer Command
+```bash
+python3 tools/relation_val_net.py --config-file "configs/e2e_relation_X_101_32_8_FPN_1x_transformer.yaml" MODEL.ROI_RELATION_HEAD.USE_GT_BOX True MODEL.ROI_RELATION_HEAD.USE_GT_OBJECT_LABEL False MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor  DTYPE "float32" GLOVE_DIR ./glove_dir  MODEL.PRETRAINED_DETECTOR_CKPT ./checkpoints/SG-Transformer-SGCls-GS3C OUTPUT_DIR ./checkpoints/SG-Transformer-SGCls-GS3C TEST.IMS_PER_BATCH 1
+```
 
 ### Examples of the Test SG-Transformer Command
 Test Example 1 : (SGCls)
 ```bash
-CUDA_VISIBLE_DEVICES=0 python tools/relation_test_net.py --config-file "configs/e2e_relation_X_101_32_8_FPN_1x_transformer.yaml" MODEL.ROI_RELATION_HEAD.USE_GT_BOX True MODEL.ROI_RELATION_HEAD.USE_GT_OBJECT_LABEL False MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor TEST.IMS_PER_BATCH 1 DTYPE "float16" GLOVE_DIR /home/yuanchai/glove_dir MODEL.PRETRAINED_DETECTOR_CKPT home/yuanchai/checkpoints/pretrained_faster_rcnn/model_final.pth OUTPUT_DIR home/yuanchai/checkpoints/SG-Transformer-SGCls-CogTree
+CUDA_VISIBLE_DEVICES=0 python tools/relation_test_net.py --config-file "configs/e2e_relation_X_101_32_8_FPN_1x_transformer.yaml" MODEL.ROI_RELATION_HEAD.USE_GT_BOX True MODEL.ROI_RELATION_HEAD.USE_GT_OBJECT_LABEL False MODEL.ROI_RELATION_HEAD.PREDICTOR TransformerPredictor TEST.IMS_PER_BATCH 1 DTYPE "float32" GLOVE_DIR ./glove_dir MODEL.PRETRAINED_DETECTOR_CKPT ./checkpoints/pretrained_faster_rcnn/model_final.pth OUTPUT_DIR ./checkpoints/SG-Transformer-SGCls-GSI
 ```
