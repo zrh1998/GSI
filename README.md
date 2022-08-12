@@ -6,7 +6,7 @@
 1. [Overview](#Overview)
 2. [Install the Requirements](INSTALL.md)
 3. [Prepare the Dataset](DATASET.md)
-4. [Training on Scene Graph Generation](#Examples of the Training SG-Transformer Command)
+4. [Training on Scene Graph Generation](#Train)
 5. [Evaluation on Scene Graph Generation](#Evaluation)
 
 ## Overview
@@ -80,6 +80,7 @@ For TCB, we need to set:
 MODEL.ROI_RELATION_HEAD.LOSS.USE_NBDT_LOSS True
 ```
 
+## Train
 ### Examples of the Training SG-Transformer Command
 Training Example 1 : (SGCls, Transformer)
 ```bash
