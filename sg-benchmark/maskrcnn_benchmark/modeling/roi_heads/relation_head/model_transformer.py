@@ -229,11 +229,6 @@ class TransformerDecoder(nn.Module):
         self.layer_stack = nn.ModuleList([
             DecoderLayer(d_model, d_inner, n_head, d_k, d_v, dropout=dropout)
             for _ in range(n_layers)])
-        # self.dec_output = nn.Sequential(*[
-        #     nn.Linear(2052, 512), nn.ReLU(inplace=True), nn.Dropout(0.1),
-        #     nn.Linear(512, 2052), nn.ReLU(inplace=True), nn.Dropout(0.1),
-        # ])
-#edge_ctx = self.context_edge(edge_pre_rep, obj_features, num_rels, num_objs)
     def forward(self, rel_inputs, obj_inputs, num_rel, num_obj):
         """
         Args:
@@ -265,11 +260,6 @@ class TransformerDecoder(nn.Module):
         enc_input = obj_inputs
         N, c1, l = dec_output.size()
         N, c2, l = enc_input.size()
-        #Decoder里面将联合区域特征和物体特征进行操作
-        # 在这里加代码，联合区域和objects进行f。
-        # dec_F = self.dec_output(torch.cat([dec_output, enc_input], dim=1))
-        # dec_output = dec_F[:, :c1, :]
-        # enc_input = dec_F[:, c1:, :]
         assert enc_input.size(1) == c2
 
         for dec_layer in self.layer_stack:
