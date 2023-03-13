@@ -313,13 +313,6 @@ class TransformerPredictor(nn.Module):
                 sub_word_embeddings.append(sub_word_embedding)
                 obj_word_embeddings.append(obj_word_embedding)
 
-                # # #几何维度
-                # sub_proposal=boxes[flag_picture][obj_id]
-                # obj_proposal=boxes[flag_picture][sub_id]
-                
-                # subject_pos.append(sub_proposal)
-                # object_pos.append(obj_proposal)
-
 
                 # subject_pos[flag_relation]=torch.from_numpy(sub_proposal)
                 # object_pos[flag_relation]=torch.from_numpy(obj_proposal)
@@ -360,16 +353,9 @@ class TransformerPredictor(nn.Module):
         #         pos_ten[m]=torch.where(torch.max(IOU_score)>0.8,union_features[max_iou.indices+flag_n],pos_ten[m])
         #         # IOU_score.zero_()
         #     flag_n=k+flag_n
-        # 失败的改进
+        
         # pair_pos_embed=pair_pos_embed.cuda()* pos_ten.cuda()
 
-        # 单纯几何维度
-        # union_features=self.pos_feature(torch.cat([pos_ten.cuda(), union_features], dim=1))
-
-        # 语义维度加几何维度
-        #union_features=self.position_word_feature(torch.cat([pair_word_embeds, union_features, pos_ten], dim=1))
-        # print(rel_feats.shape)
-        # print(union_features.shape)
 
 
         #rel_feats, pair_pred, obj_dists = self.feature_generate(roi_features, proposals, num_objs, rel_pair_idxs, union_features, num_rels, logger)
